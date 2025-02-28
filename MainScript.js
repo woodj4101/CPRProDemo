@@ -317,3 +317,108 @@ $(function() {
 
 	requestAnimationFrame(glowBtn);
 });
+
+/*
+			
+			const STATE = {
+				NORMAL: "NORMAL",
+				VF: "VF",
+				CPR: "CPR",
+				DEF: "DEF",
+				END: "END"
+			};
+			
+			var isPatientAttachPad = false;
+			
+			let patient = STATE.NORMAL;
+			
+			const anormalECG = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+							0.08, 0.18, 0.08, 0, 0, 0, 0, 0, 0, -0.04, 
+							-0.08, 0.3, 0.7, 0.3, -0.17, 0.00, 0.04, 0.04, 
+							0.05, 0.05, 0.06, 0.07, 0.08, 0.10, 0.11, 0.11, 
+							0.10, 0.085, 0.06, 0.04, 0.03, 0.01, 0.01, 0.01, 
+							0.01, 0.02, 0.03, 0.05, 0.05, 0.05, 0.03, 0.02, 0, 0, 0];
+							
+			const normalECG = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 1,];
+
+			var normalECGidx = 0;
+			
+			function getNormalECG() {
+				if (normalECGidx++ >= normalECG.length - 1) normalECGidx=0;
+				var output = new Array();
+				output[0] = normalECG[normalECGidx] + hysteresisRandom()/10;
+				return output;
+			}
+			
+			const defECG = [-1, -1, -1, -1, -1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+			
+			var defECGidx = 0;
+			function getDefECG() {
+				var output = new Array();
+				if (defECGidx < 15) {
+					output[0] = -1;
+				} else if (defECGidx < 30) {
+					output[0] = 1;
+				} else {
+					output[0] = 0;
+				}
+				
+				if (defECGidx >= 40) {
+					defECGidx=0;
+					patient = STATE.NORMAL;
+					output[0] = 0;
+				}
+				
+				defECGidx = defECGidx + 1;
+				return output;
+			}
+			
+			function generateVFECGData(length) {
+    const data = [];
+    let value = 0;
+    for (let i = 0; i < length; i++) {
+        // -0.05에서 0.05 사이의 무작위 값 생성
+        const change = (Math.random() - 0.5) * 0.1;
+        value += change;
+        // 값이 -1과 1 사이로 유지되도록 제한
+        if (value > 1) value = 1;
+        if (value < -1) value = -1;
+        data.push(value);
+    }
+    return data;
+}
+			
+			var data1 = generateVFECGData(1000);
+
+			var count1 = 0;
+			function getECG(){
+				
+				if (count1 >= anormalECG.length) count1 = 0;
+				
+				var output = new Array();
+				if (!isPatientAttachPad) {
+					output[0] = -1 + hysteresisRandom()/10;
+				} else {
+					output[0] = anormalECG[count1] + hysteresisRandom()/10;
+				}
+				count1 = count1 + 1;
+				return output;
+			}
+			
+			const ecgChart = new PlethGraph("ecgChart", getECG);
+			
+			ecgChart.scaleFactor = 1;
+			ecgChart.speed = 2;
+			ecgChart.linewidth = 0.5;
+			ecgChart.start();
+			
+			document.getElementById("AEDPadBtn").addEventListener("click", () => {
+				isPatientAttachPad = true;
+			});
+*/
