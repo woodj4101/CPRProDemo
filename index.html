@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-status-bar-style" content="default">
+		<meta name="apple-mobile-web-app-title" content="CPR PRO">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+		<title>CPR PRO DEMO</title>
+		<style>
+
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+				text-align: center;
+				font-family: 'Noto Sans KR', sans-serif;
+				font-size: 3.5vw;
+			}
+
+			body, html {
+				height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.mainPanel {
+				display: grid;
+				grid-template-columns: 1fr 1fr 1fr;
+				grid-template-rows: 1.5fr 2fr 1.5fr;
+				width: 60vmin;
+				height: 100vmin;
+			}
+
+			@media (min-aspect-ratio: 3/5) {
+				* { font-size: calc(calc(100vh * 3 / 5) * 0.035) }
+				.role { font-size: calc(calc(100vh * 3 / 5) * 0.023) }
+				.mainPanel {
+					height: 100vh;
+					width: calc(100vh * 3 / 5);
+				}
+			}
+
+			@media (max-aspect-ratio: 3/5) {
+				.role { font-size: 2.3vw; }
+				.mainPanel {
+					width: 100vw;
+					height: calc(100vw * 5 / 3);
+				}
+			}
+
+			.item {
+				display: flex;
+				justify-content: center;
+				flex-direction: column;
+				align-items: center;
+				overflow: hidden;
+			}
+			#itemNumber5 { border: 1px solid #ff7f7f; }
+
+			.role {
+				width: 100%;
+				border-radius: 8px;
+				font-weight: bold;
+			}
+			.helper { background-color: #d9ead3; }
+			.leader { background-color: #add8e6; }
+
+			.icon { padding: 10px; }
+			#aedIcon, #megaphoneIcon { height: 50%; }
+			#cprIcon { height: 41% }
+			#patientIcon { height: 70%; }
+
+			.btnWrap {
+				height: 100%;
+				width: 100%;
+				display: flex;
+				flex: 1;
+				flex-direction: column;
+				justify-content: space-between;
+				gap: 3px;
+				padding: 3px;
+			}
+
+			.defaultBtn {
+				width: 100%;
+				background-color: #ffffff;
+				color: #000000;
+				border: 1px solid #d4d4d4;
+				flex: 1;
+				display: none;
+				font-weight: bold;
+			}
+			.defaultBtn:active {
+				background-color: #ececec;
+				border: 1px solid #7b0000;
+			}
+
+			#stopCPRBtn {
+				background-color: #ececec;
+				color: #000000;
+				border: 1px solid #7b0000;
+			}
+			#stopCPRBtn:active {
+				background-color: #ffffff;
+				border: 1px solid #d4d4d4;
+			}
+
+			#arrestBtn {
+				width: 100%;
+				height: 10%;
+				flex: 1;
+				background-color: #fbd9d3;
+				color: #ff7f7f;
+				border: 1px solid #ffa8b5;
+				font-weight: bold;
+			}
+			#arrestBtn:active {
+				background-color: #ffb09c;
+				border: 1px solid #ff474C;
+			}
+
+			#ecgChart {
+				width: 100%;
+				height: 10%;
+				flex: 1;
+			}
+
+			#ccfProgress {
+				height: 10%;
+				width: 100%;
+				position: relative;
+				flex: 1;
+			}
+			#ccfProgress:before {
+				content: "CCF: " attr(data-percent);
+				position: absolute;
+				width: 100%;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				z-index: 2;
+				flex: 1;
+			}
+			#ccfProgress #ccfValue {
+				height: 100%;
+				width: 0%;
+				background-color: #add8e6;
+				transition: all 500ms ease-out;
+				flex: 1;
+			}
+
+		</style>
+		<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+		<script src="./PlethGraph.js"></script>
+	</head>
+	
+	<body>
+		<div class="mainPanel">
+			<div class="item" id="itemNumber1">
+			</div>
+			<div class="item" id="itemNumber2">
+				<div class="name">홍길동</div>
+				<div class="role helper">Technician-3</div>
+				<svg class="icon" id="aedIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" baseProfile="tiny">
+					<path d="M367.703,122.859c-60.344,0-99.938,32.109-111.703,69.734c-11.766-37.625-51.359-69.734-111.703-69.734c-63.719,0-121.344,58.406-115.375,138.266C37.109,370.688,224.5,512,256,512s218.891-141.313,227.078-250.875C489.047,181.266,431.422,122.859,367.703,122.859z M348.094,292.25L182.906,433.625l55-99.781h-45.063l47.203-116.406h109.484l-56.703,74.813H348.094z"/>
+					<path d="M112.391,95.672h13.641c0.984,0,1.547-0.422,1.828-1.406l6.328-18.563l1.797-5.266h32.422l1.797,5.266l6.344,18.563c0.281,0.984,0.844,1.406,1.828,1.406h13.781c0.984,0,1.266-0.578,0.984-1.406L160.781,1.406C160.5,0.578,159.938,0,158.953,0H146c-0.969,0-1.547,0.578-1.828,1.406l-32.781,92.859C111.125,95.094,111.391,95.672,112.391,95.672z M152.063,23.781h0.422l11.984,35.156h-24.531L152.063,23.781z"/>
+					<path d="M227.828,95.672h59.938c0.844,0,1.422-0.578,1.422-1.406V82.156c0-0.844-0.578-1.391-1.422-1.391h-43.891c-0.563,0-0.844-0.297-0.844-0.859V55.719c0-0.563,0.281-0.844,0.844-0.844h30.328c0.828,0,1.391-0.563,1.391-1.406V41.375c0-0.859-0.563-1.422-1.391-1.422h-30.328c-0.563,0-0.844-0.281-0.844-0.844V15.781c0-0.594,0.281-0.859,0.844-0.859h43.891c0.844,0,1.422-0.578,1.422-1.422V1.406c0-0.828-0.578-1.406-1.422-1.406h-59.938c-0.844,0-1.391,0.578-1.391,1.406v92.859C226.438,95.094,226.984,95.672,227.828,95.672z"/>
+					<path d="M332.188,95.672h34.188c16.469,0,27.438-7.313,31.938-21.25c1.547-4.781,2.391-9.984,2.391-26.594c0-16.594-0.844-21.797-2.391-26.578C393.813,7.328,382.844,0,366.375,0h-34.188c-0.844,0-1.406,0.578-1.406,1.406v92.859C330.781,95.094,331.344,95.672,332.188,95.672z M347.391,15.781c0-0.594,0.281-0.859,0.844-0.859h14.203c10.547,0,17.016,3.516,19.828,12.094c1,2.672,1.703,6.891,1.703,20.813c0,13.797-0.703,18.172-1.703,20.828c-2.813,8.578-9.281,12.109-19.828,12.109h-14.203c-0.563,0-0.844-0.297-0.844-0.859V15.781z"/>
+				</svg>
+				<div class="btnWrap">
+					<button class="defaultBtn" id="aedArriveBtn">AED 도착</button>
+					<button class="defaultBtn" id="aedPowerOnBtn">AED 전원 ON</button>
+					<button class="defaultBtn" id="attachPadsBtn">패드 부착</button>
+					<button class="defaultBtn" id="analyzeECGBtn">심전도 분석</button>
+					<button class="defaultBtn" id="ensureClearBtn">환자로부터 떨어짐</button>
+					<button class="defaultBtn" id="shockBtn">제세동</button>
+				</div>
+			</div>
+			<div class="item" id="itemNumber3">
+			</div>
+			<div class="item" id="itemNumber4">
+				<div class="name">구마적</div>
+				<div class="role helper">Technician-1</div>
+				<svg class="icon" id="cprIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="157 89.56 292.14 408.85" baseProfile="tiny">
+					<g transform="translate(0.000000,600.000000) scale(0.100000,-0.100000)" stroke="black" stroke-width="20">
+						<path d="M2853 5100 c-45 -10 -80 -35 -97 -68 -7 -15 -55 -160 -105 -322 -51 -162 -101 -323 -112 -356 l-20 -62 -62 1 c-62 1 -127 -22 -155 -55 -6 -8 -38 -75 -72 -149 -33 -74 -64 -133 -69 -132 -5 1 -66 43 -136 93 -144 102 -204 126 -292 117 -106 -11 -163 -65 -163 -155 0 -24 7 -57 16 -75 10 -18 96 -128 192 -245 127 -156 176 -223 182 -250 5 -20 18 -122 31 -227 l22 -190 -206 -380 -206 -379 21 -23 c12 -13 22 -22 24 -20 1 1 98 180 216 398 l215 395 -29 225 -29 225 160 358 c88 197 168 367 177 377 9 11 35 24 56 30 54 14 94 -1 176 -67 37 -29 73 -54 80 -54 54 0 109 27 171 85 77 72 98 85 142 85 55 0 95 -33 115 -96 19 -60 63 -108 112 -118 16 -4 62 1 103 10 41 9 99 18 129 21 50 5 59 2 88 -22 38 -32 49 -81 33 -145 -14 -55 -4 -90 37 -133 50 -53 72 -59 138 -37 140 49 244 1 244 -111 0 -77 -136 -437 -200 -529 -9 -14 -15 -31 -13 -37 10 -27 52 -9 133 57 76 61 86 67 98 53 16 -22 15 -81 -3 -132 -18 -51 -104 -199 -198 -341 -91 -137 -134 -189 -165 -201 -14 -5 -106 -18 -205 -29 -230 -26 -269 -36 -370 -103 -165 -108 -261 -206 -322 -327 -12 -25 -70 -202 -129 -395 l-106 -349 22 -23 c12 -13 25 -20 29 -16 6 6 116 371 197 651 8 28 18 52 22 52 4 0 67 -215 140 -478 73 -262 136 -480 140 -485 3 -4 16 3 27 15 l21 23 -78 280 c-43 154 -108 383 -143 510 l-66 230 20 32 c55 88 298 273 386 294 21 5 119 18 217 29 198 23 221 27 252 47 26 17 14 35 174 -260 118 -217 124 -226 142 -210 10 9 18 22 18 30 0 8 -53 111 -119 231 -65 119 -125 231 -134 247 -15 31 -15 31 50 125 94 138 209 334 234 399 16 42 20 71 16 116 l-4 60 141 145 c271 277 329 376 262 439 -60 57 -130 49 -294 -34 -60 -30 -116 -55 -123 -55 -8 0 -26 20 -40 44 -17 28 -40 50 -67 62 -23 10 -42 22 -42 25 0 4 63 109 140 234 150 245 164 281 137 347 -19 45 -54 69 -111 75 -82 10 -105 -6 -253 -170 -75 -84 -153 -171 -174 -194 l-39 -42 -32 29 c-18 17 -38 30 -45 30 -7 0 -13 7 -13 15 0 8 38 147 85 308 94 323 101 371 62 427 -50 75 -151 96 -224 48 -41 -27 -61 -62 -263 -450 -50 -98 -95 -178 -99 -178 -24 0 -71 24 -71 36 0 8 19 130 42 272 49 296 53 358 22 399 -41 56 -139 90 -211 73z m129 -78 c50 -29 53 -55 25 -229 -14 -87 -36 -225 -48 -306 -23 -148 -23 -148 -53 -161 -17 -8 -59 -40 -92 -73 -34 -34 -78 -66 -97 -72 -35 -12 -38 -11 -89 30 -29 23 -53 47 -52 53 2 18 225 730 235 748 20 38 114 43 171 10z m575 -117 c47 -20 62 -41 63 -90 0 -22 -37 -166 -81 -320 -45 -154 -85 -291 -88 -305 -7 -22 -18 -27 -111 -48 -86 -19 -108 -21 -132 -11 -28 11 -58 54 -58 81 0 7 -6 24 -13 38 -13 24 -4 44 138 318 153 294 174 328 210 343 28 11 31 11 72 -6z m548 -490 c43 -42 37 -59 -116 -308 -174 -281 -155 -259 -243 -281 -83 -21 -94 -18 -121 35 -11 20 -12 35 -5 60 6 19 10 52 10 74 1 38 11 52 172 230 94 105 180 195 192 202 36 21 84 16 111 -12z m-2277 -314 c26 -8 186 -113 296 -196 18 -14 15 -22 -59 -189 -43 -97 -82 -173 -86 -170 -7 4 -121 142 -282 342 -70 86 -82 125 -56 173 22 42 113 61 187 40z m2577 -333 c37 -17 32 -47 -21 -117 -65 -87 -343 -381 -359 -381 -8 0 -17 5 -20 10 -4 7 -23 -1 -48 -20 -22 -16 -42 -28 -44 -27 -1 2 27 83 62 180 36 97 65 187 65 199 0 19 19 32 123 83 173 85 199 93 242 73z"/>
+					</g>
+				</svg>
+				<div class="btnWrap">
+					<button class="defaultBtn" id="checkResponseBtn">반응 확인</button>
+					<button class="defaultBtn" id="call119Btn">119 요청</button>
+					<button class="defaultBtn" id="requestAEDBtn">AED 요청</button>
+					<button class="defaultBtn" id="checkBreathBtn">호흡 확인</button>
+					<button class="defaultBtn" id="startCPRBtn">가슴 압박 시작</button>
+					<button class="defaultBtn" id="stopCPRBtn">가슴 압박 중지</button>
+				</div>
+			</div>
+			<div class="item" id="itemNumber5">
+				<div class="btnWrap">
+					<button id="arrestBtn">심정지 발생</button>
+				</div>
+				<canvas id="ecgChart"></canvas>
+				<svg class="icon" id="patientIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="37.25 0 50.7 125.2" baseProfile="tiny">
+					<path d="M52.65,125.2h19.9c3.3,0,6-2.7,6-6V86.301h3.399c3.301,0,6-2.701,6-6V43.2c0-3.3-2.699-6-6-6H43.25c-3.3,0-6,2.7-6,6   v37.101c0,3.299,2.7,6,6,6h3.4V119.2C46.65,122.5,49.25,125.2,52.65,125.2z"/>
+					<circle cx="62.55" cy="15.7" r="15.7"/>
+				</svg>
+				<div id="ccfProgress" data-percent="0%">
+					<div id="ccfValue"></div>
+				</div>
+			</div>
+			<div class="item" id="itemNumber6">
+				<div class="name">한석봉</div>
+				<div class="role helper">Technician-2</div>
+				<svg class="icon" id="cprIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="157 89.56 292.14 408.85" baseProfile="tiny">
+					<g transform="translate(0.000000,600.000000) scale(0.100000,-0.100000)" stroke="black" stroke-width="20">
+						<path d="M2853 5100 c-45 -10 -80 -35 -97 -68 -7 -15 -55 -160 -105 -322 -51 -162 -101 -323 -112 -356 l-20 -62 -62 1 c-62 1 -127 -22 -155 -55 -6 -8 -38 -75 -72 -149 -33 -74 -64 -133 -69 -132 -5 1 -66 43 -136 93 -144 102 -204 126 -292 117 -106 -11 -163 -65 -163 -155 0 -24 7 -57 16 -75 10 -18 96 -128 192 -245 127 -156 176 -223 182 -250 5 -20 18 -122 31 -227 l22 -190 -206 -380 -206 -379 21 -23 c12 -13 22 -22 24 -20 1 1 98 180 216 398 l215 395 -29 225 -29 225 160 358 c88 197 168 367 177 377 9 11 35 24 56 30 54 14 94 -1 176 -67 37 -29 73 -54 80 -54 54 0 109 27 171 85 77 72 98 85 142 85 55 0 95 -33 115 -96 19 -60 63 -108 112 -118 16 -4 62 1 103 10 41 9 99 18 129 21 50 5 59 2 88 -22 38 -32 49 -81 33 -145 -14 -55 -4 -90 37 -133 50 -53 72 -59 138 -37 140 49 244 1 244 -111 0 -77 -136 -437 -200 -529 -9 -14 -15 -31 -13 -37 10 -27 52 -9 133 57 76 61 86 67 98 53 16 -22 15 -81 -3 -132 -18 -51 -104 -199 -198 -341 -91 -137 -134 -189 -165 -201 -14 -5 -106 -18 -205 -29 -230 -26 -269 -36 -370 -103 -165 -108 -261 -206 -322 -327 -12 -25 -70 -202 -129 -395 l-106 -349 22 -23 c12 -13 25 -20 29 -16 6 6 116 371 197 651 8 28 18 52 22 52 4 0 67 -215 140 -478 73 -262 136 -480 140 -485 3 -4 16 3 27 15 l21 23 -78 280 c-43 154 -108 383 -143 510 l-66 230 20 32 c55 88 298 273 386 294 21 5 119 18 217 29 198 23 221 27 252 47 26 17 14 35 174 -260 118 -217 124 -226 142 -210 10 9 18 22 18 30 0 8 -53 111 -119 231 -65 119 -125 231 -134 247 -15 31 -15 31 50 125 94 138 209 334 234 399 16 42 20 71 16 116 l-4 60 141 145 c271 277 329 376 262 439 -60 57 -130 49 -294 -34 -60 -30 -116 -55 -123 -55 -8 0 -26 20 -40 44 -17 28 -40 50 -67 62 -23 10 -42 22 -42 25 0 4 63 109 140 234 150 245 164 281 137 347 -19 45 -54 69 -111 75 -82 10 -105 -6 -253 -170 -75 -84 -153 -171 -174 -194 l-39 -42 -32 29 c-18 17 -38 30 -45 30 -7 0 -13 7 -13 15 0 8 38 147 85 308 94 323 101 371 62 427 -50 75 -151 96 -224 48 -41 -27 -61 -62 -263 -450 -50 -98 -95 -178 -99 -178 -24 0 -71 24 -71 36 0 8 19 130 42 272 49 296 53 358 22 399 -41 56 -139 90 -211 73z m129 -78 c50 -29 53 -55 25 -229 -14 -87 -36 -225 -48 -306 -23 -148 -23 -148 -53 -161 -17 -8 -59 -40 -92 -73 -34 -34 -78 -66 -97 -72 -35 -12 -38 -11 -89 30 -29 23 -53 47 -52 53 2 18 225 730 235 748 20 38 114 43 171 10z m575 -117 c47 -20 62 -41 63 -90 0 -22 -37 -166 -81 -320 -45 -154 -85 -291 -88 -305 -7 -22 -18 -27 -111 -48 -86 -19 -108 -21 -132 -11 -28 11 -58 54 -58 81 0 7 -6 24 -13 38 -13 24 -4 44 138 318 153 294 174 328 210 343 28 11 31 11 72 -6z m548 -490 c43 -42 37 -59 -116 -308 -174 -281 -155 -259 -243 -281 -83 -21 -94 -18 -121 35 -11 20 -12 35 -5 60 6 19 10 52 10 74 1 38 11 52 172 230 94 105 180 195 192 202 36 21 84 16 111 -12z m-2277 -314 c26 -8 186 -113 296 -196 18 -14 15 -22 -59 -189 -43 -97 -82 -173 -86 -170 -7 4 -121 142 -282 342 -70 86 -82 125 -56 173 22 42 113 61 187 40z m2577 -333 c37 -17 32 -47 -21 -117 -65 -87 -343 -381 -359 -381 -8 0 -17 5 -20 10 -4 7 -23 -1 -48 -20 -22 -16 -42 -28 -44 -27 -1 2 27 83 62 180 36 97 65 187 65 199 0 19 19 32 123 83 173 85 199 93 242 73z"/>
+					</g>
+				</svg>
+				<div class="btnWrap">
+					<button class="defaultBtn" id="switchCompressBtn">가슴압박 교대</button>
+					<button class="defaultBtn" id="metronumeBtn">메트로눔 재생</button>
+				</div>
+			</div>
+			<div class="item" id="itemNumber7">
+			</div>
+			<div class="item" id="itemNumber8">
+				<div class="name">이순신</div>
+				<div class="role leader">Leader</div>
+				<svg class="icon" id="megaphoneIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-81.92 -81.92 675.84 675.84" transform="rotate(-45)matrix(-1, 0, 0, 1, 0, 0)"  baseProfile="tiny">
+					<path d="M497.968,177.852h-18.305v-30.804c0-6.789-5.523-12.312-12.312-12.312H357.238c-4.926,0-9.174,2.916-11.14,7.105 L134.354,51.094c-2.691-19.697-19.614-34.926-40.038-34.926c-22.289,0-40.421,18.132-40.421,40.421v111.029 C23.528,171.594,0,197.619,0,229.052v21.558c0,31.434,23.528,57.458,53.895,61.435v111.029c0,22.289,18.132,40.421,40.421,40.421 c20.424,0,37.347-15.229,40.037-34.926l211.744-90.748c1.966,4.19,6.214,7.106,11.14,7.106h10.319l20.566,143.965 c0.569,3.983,3.98,6.941,8.003,6.941h64.674c4.466,0,8.084-3.62,8.084-8.084V344.82c6.066-0.759,10.779-5.937,10.779-12.206 V301.81h18.305c7.737,0,14.032-6.294,14.032-14.031v-95.896C512,184.146,505.705,177.852,497.968,177.852z M53.895,295.706 c-21.418-3.83-37.726-22.595-37.726-45.096v-21.558c0-22.501,16.309-41.267,37.726-45.096V295.706z M161.684,399.265 l-26.947,11.549V167.787c0-4.465-3.62-8.084-8.084-8.084c-4.465,0-8.084,3.62-8.084,8.084v254.691 c0,13.134-10.193,24.335-23.317,24.83c-13.798,0.521-25.188-10.552-25.188-24.235V57.184c0-13.134,10.193-24.335,23.317-24.83 c13.798-0.521,25.188,10.552,25.188,24.235v79.176c0,4.465,3.62,8.084,8.084,8.084c4.465,0,8.084-3.62,8.084-8.084V68.849 l26.947,11.549V399.265z M344.926,320.732l-167.074,71.602V87.327l167.074,71.602V320.732z M452.716,479.663h-49.578 L383.89,344.926h68.826V479.663z M463.495,328.757h-102.4V150.905h102.4V328.757z M495.832,285.642h-16.168v-91.621h16.168 V285.642z"/>
+				</svg>
+			</div>
+			<div class="item" id="itemNumber9">
+			</div>
+		</div>
+		
+		<script>
+
+			const PHASE = {
+				None: -1,
+				Fibrill: 0,
+				ChResp: 1,
+				Call119: 2,
+				ReqAED: 3,
+				ChBreath: 4,
+				StartCPR: 5,
+				ArriveAED: 6,
+				PowerOnAED: 7,
+				AttachPads: 8,
+				AnalyzeECG: 9,
+				Clear: 10,
+				Shock: 11,
+				Restored: 12,
+				Arrest: 13
+			};
+
+			const glowTarget = [
+				"#arrestBtn",
+				"#checkResponseBtn",
+				"#call119Btn",
+				"#requestAEDBtn",
+				"#checkBreathBtn",
+				"#startCPRBtn",
+				"#aedArriveBtn",
+				"#aedPowerOnBtn",
+				"#analyzeECGBtn",
+				"#ensureClearBtn",
+				"#shockBtn"
+			];
+
+			var stage = PHASE.None;
+			var patient = true;
+
+			var timeStamp = Array.from({length: PHASE.Arrest}, () => 0);
+
+			function updateBtn() {
+				if (stage < PHASE.Restored) stage++;
+				
+				$(glowTarget[glowindx]).css({ color: "#000000" });
+
+				if (stage == PHASE.Fibrill) {
+					$("#arrestBtn").css({
+						backgroundColor: "#a9a9a9",
+						color: "#696969",
+						border: "solid 1px #909090"
+					});
+					$("#arrestBtn").text("환자 : 세동");
+
+					$(glowTarget[++glowindx]).css({ display: "block" });
+
+					setTimeout( () => {
+						if (stage < PHASE.StartCPR) {
+							patient = false;
+							$("#arrestBtn").text("환자 : 심정지");
+						}
+					}, 480000);
+				} else if (stage < PHASE.StartCPR) {
+					$(glowTarget[glowindx]).css({ display: "none" });
+					$(glowTarget[++glowindx]).css({ display: "block" });
+				} else if (stage == PHASE.StartCPR) {
+					$(glowTarget[++glowindx]).css({ display: "block" });
+				}
+
+				timeStamp[stage] = new Date();
+			}
+
+			var currentCPR = false;
+			var currentApprentice = 1;
+			var totalCPRTime = Array.from({length: 2}, () => 0);
+			var totalStopTime = Array.from({length: 2}, () => 0);
+			var startCPRTime = 0;
+			var stopCPRTime = 0;
+			var updateCCFGauge = 0;
+			function measureCPR(isEnd) {
+				if (updateCCFGauge == 0) updateCCFGauge = setInterval(updateCCF, 100);
+				
+				if (isEnd) {
+					if (currentCPR) {
+						totalCPRTime[currentApprentice - 1] += Date.now() - startCPRTime;
+						$("#stopCPRBtn").css({ display: "none" });
+					} else {
+						totalStopTime[currentApprentice - 1] += Date.now() - stopCPRTime;
+						$("#startCPRBtn").css({ display: "none" });
+					}
+					startCPRTime = 0;
+					stopCPRTime = 0;
+					currentCPR = false;
+					clearInterval(updateCCFGauge);
+					updateCCF();
+					return;
+				}
+
+				if (currentCPR) {
+					$("#startCPRBtn").css({ display: "block" });
+					$("#stopCPRBtn").css({ display: "none" });
+					currentCPR = false;
+					stopCPRTime = Date.now();
+					totalCPRTime[currentApprentice - 1] += stopCPRTime - startCPRTime;
+					startCPRTime = 0;
+				} else {
+					$("#startCPRBtn").css({ display: "none" });
+					$("#stopCPRBtn").css({ display: "block" });
+					currentCPR = true;
+					startCPRTime = Date.now();
+					if (stopCPRTime != 0) totalStopTime[currentApprentice - 1] += startCPRTime - stopCPRTime;
+					stopCPRTime = 0;
+				}
+			}
+			
+			var ccfPercent = 0;
+			function updateCCF() {
+				let total = Date.now() - timeStamp[PHASE.StartCPR];
+				let totalStop = 0;
+				if (currentCPR) {
+					totalStop = totalStopTime[0] + totalStopTime[1];
+					ccfPercent = (total - totalStop) / total;
+				} else {
+					totalCPR = totalCPRTime[0] + totalCPRTime[1];
+					ccfPercent = totalCPR / total;
+				}
+				ccfPercent = ccfPercent * 100;
+
+				if (!isChangeCCFRunning) startChangeCCF();
+			}
+
+			var isGlowBtnRunning = true;
+			var glow = false;
+			var glowindx = 0;
+			function stopGlowBtn() { isGlowBtnRunning = false; }
+			function restartGlowBtn() { isGlowBtnRunning = true; requestAnimationFrame(glowBtn); }
+			function glowBtn() {
+				if (!isGlowBtnRunning) return;
+
+				let glowTextColor;
+				let glowBackgroundColor;
+				let glowBorderColor;
+
+				if (glowTarget[glowindx] == "#arrestBtn") {
+					glowTextColor = "#ffff00";
+					glowBackgroundColor = "#FDECDA";
+					glowBorderColor = "1px solid #FF9D7F";
+				} else {
+					glowTextColor = "#ffa500";
+					glowBackgroundColor = "#ffffe0";
+					glowBorderColor = "1px solid #ff9248";
+				}
+
+				if (glow) {
+					$(glowTarget[glowindx]).css({ color: "" });
+					$(glowTarget[glowindx]).css({ backgroundColor: "" });
+					$(glowTarget[glowindx]).css({ border: "" });
+					glow = false;
+					setTimeout(() => requestAnimationFrame(glowBtn), 1000);
+				} else {
+					$(glowTarget[glowindx]).css({ color: glowTextColor });
+					$(glowTarget[glowindx]).css({ backgroundColor: glowBackgroundColor });
+					$(glowTarget[glowindx]).css({ border: glowBorderColor });
+					glow = true;
+					setTimeout(() => requestAnimationFrame(glowBtn), 150);
+				}
+			}
+			
+			var isChangeCCFRunning = false;
+			function stopChangeCCF() { isChangeCCFRunning = false; }
+			function startChangeCCF() { isChangeCCFRunning = true; requestAnimationFrame(changeCCF); }
+			function changeCCF() {
+				if (!isChangeCCFRunning) return;
+
+				$("#ccfValue").css({ width: ccfPercent + "%" });
+				$("#ccfProgress").attr("data-percent", (Math.round(ccfPercent * 10) / 10) + "%");
+
+				let maxWidth = $("#ccfProgress").width();
+				let currentWidth = $("#ccfValue").width();
+				let widthPercent = (currentWidth / maxWidth);
+
+				if (widthPercent < 0.3) {
+					$("#ccfValue").css({ backgroundColor: "#ff0000" });
+				} else if (widthPercent < 0.45) {
+					$("#ccfValue").css({ backgroundColor: "#FF8000" });
+				} else if (widthPercent < 0.6) {
+					$("#ccfValue").css({ backgroundColor: "#ffff00" });
+				} else if (widthPercent < 0.8) {
+					$("#ccfValue").css({ backgroundColor: "#A6D728" });
+				} else {
+					$("#ccfValue").css({ backgroundColor: "#4caf50" });
+				}
+
+				requestAnimationFrame(changeCCF);
+			}
+
+			requestAnimationFrame(glowBtn);
+
+			$("#arrestBtn").click( () => { if (stage == PHASE.None) updateBtn(); } );
+			$(".defaultBtn").click( () => { if (stage < PHASE.ChBreath) updateBtn(); } );
+			$("#startCPRBtn").click( () => {
+				if (stage == PHASE.ChBreath) updateBtn();
+				measureCPR(false);
+			} );
+			$("#stopCPRBtn").click( () => { measureCPR(false); } );
+
+		</script>
+	</body>
+</html>
