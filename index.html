@@ -3,7 +3,7 @@
 <head>
 	<head>
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-status-bar-style" content="default">
 		<meta name="apple-mobile-web-app-title" content="CPR PRO">
@@ -20,6 +20,7 @@
 				text-align: center;
 				font-family: 'Noto Sans KR', sans-serif;
 				font-size: 3.5vw;
+				user-select: none;
 			}
 
 			body, html {
@@ -149,8 +150,8 @@
 			}
 			#ccfProgress #ccfValue {
 				height: 100%;
-				width: 0%;
-				background-color: #add8e6;
+				width: 100%;
+				background-color: #ffffff;
 				transition: all 500ms ease-out;
 				flex: 1;
 			}
@@ -276,13 +277,14 @@
 
 			var stage = PHASE.None;
 			var patient = true;
+			var aedCycle = 0;
 
 			var timeStamp = Array.from({length: PHASE.Arrest}, () => 0);
 
 			function updateBtn() {
 				if (stage < PHASE.Restored) stage++;
 				
-				$(glowTarget[glowindx]).css({ color: "#000000" });
+				resetGlowCSS();
 
 				if (stage == PHASE.Fibrill) {
 					$("#arrestBtn").css({
@@ -292,7 +294,7 @@
 					});
 					$("#arrestBtn").text("환자 : 세동");
 
-					$(glowTarget[++glowindx]).css({ display: "block" });
+					delayShowBtn(true, 1);
 
 					setTimeout( () => {
 						if (stage < PHASE.StartCPR) {
@@ -301,13 +303,27 @@
 						}
 					}, 480000);
 				} else if (stage < PHASE.StartCPR) {
-					$(glowTarget[glowindx]).css({ display: "none" });
-					$(glowTarget[++glowindx]).css({ display: "block" });
+					disableBtn();
+					let second = 1;
+					if (stage == PHASE.ChResp) second = 3.5;
+					if (stage == PHASE.ChBreath) second = 5;
+					delayShowBtn(true, second);
 				} else if (stage == PHASE.StartCPR) {
-					$(glowTarget[++glowindx]).css({ display: "block" });
-				}
+					delayShowBtn(true, 60);
+				} 
 
 				timeStamp[stage] = new Date();
+			}
+
+			function disableBtn() {
+				$(glowTarget[glowindx]).css({ display: "none" });
+			}
+
+			function delayShowBtn(isGlowIndxIncrease = false, second) {
+				if (isGlowIndxIncrease) glowindx++;
+				setTimeout( () => {
+					$(glowTarget[glowindx]).css({ display: "block" });
+				}, second * 1000);
 			}
 
 			var currentCPR = false;
@@ -317,7 +333,7 @@
 			var startCPRTime = 0;
 			var stopCPRTime = 0;
 			var updateCCFGauge = 0;
-			function measureCPR(isEnd) {
+			function measureCPR(isEnd = false) {
 				if (updateCCFGauge == 0) updateCCFGauge = setInterval(updateCCF, 100);
 				
 				if (isEnd) {
@@ -392,20 +408,28 @@
 				}
 
 				if (glow) {
-					$(glowTarget[glowindx]).css({ color: "" });
-					$(glowTarget[glowindx]).css({ backgroundColor: "" });
-					$(glowTarget[glowindx]).css({ border: "" });
+					resetGlowCSS();
 					glow = false;
 					setTimeout(() => requestAnimationFrame(glowBtn), 1000);
 				} else {
-					$(glowTarget[glowindx]).css({ color: glowTextColor });
-					$(glowTarget[glowindx]).css({ backgroundColor: glowBackgroundColor });
-					$(glowTarget[glowindx]).css({ border: glowBorderColor });
+					$(glowTarget[glowindx]).css({
+						color: glowTextColor,
+						backgroundColor: glowBackgroundColor,
+						border: glowBorderColor
+					});
 					glow = true;
 					setTimeout(() => requestAnimationFrame(glowBtn), 150);
 				}
 			}
-			
+
+			function resetGlowCSS() {
+				$(glowTarget[glowindx]).css({
+					color: "",
+					backgroundColor: "",
+					border: ""
+				});
+			}
+
 			var isChangeCCFRunning = false;
 			function stopChangeCCF() { isChangeCCFRunning = false; }
 			function startChangeCCF() { isChangeCCFRunning = true; requestAnimationFrame(changeCCF); }
@@ -434,15 +458,15 @@
 				requestAnimationFrame(changeCCF);
 			}
 
-			requestAnimationFrame(glowBtn);
-
 			$("#arrestBtn").click( () => { if (stage == PHASE.None) updateBtn(); } );
 			$(".defaultBtn").click( () => { if (stage < PHASE.ChBreath) updateBtn(); } );
 			$("#startCPRBtn").click( () => {
 				if (stage == PHASE.ChBreath) updateBtn();
-				measureCPR(false);
+				measureCPR();
 			} );
-			$("#stopCPRBtn").click( () => { measureCPR(false); } );
+			$("#stopCPRBtn").click( () => { measureCPR(); } );
+
+			requestAnimationFrame(glowBtn);
 
 		</script>
 	</body>
