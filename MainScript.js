@@ -107,7 +107,7 @@ function showBtn(target, second = 0, isGlowIndxIncrease = false) {
 			$(target).css({ display: "block" });
 		} else {
 			setTimeout( () => {
-				$(target).css({ display: "block" });
+				if (stage < 18)	$(target).css({ display: "block" });
 			}, second * 1000);
 		}
 }
@@ -284,13 +284,19 @@ function changeCCF() {
 }
 
 function endTraining() {
-	if (patient) timeStamp[++stage] = new Date();
-	else timeStamp[PHASE.FullArrest] = new Date();
+	if (patient) {
+		timeStamp[++stage] = new Date();
+		$("#arrestBtn").text("환자 : 정상");
+	} else {
+		timeStamp[PHASE.FullArrest] = new Date();
+		$("#arrestBtn").text("환자 : 심정지");
+	}
 	resetGlowCSS();
 	disableBtn(".defaultBtn");
 	stopChangeCCF();
 	stopGlowBtn();
 	measureCPR(true);
+	alert("훈련 종료");
 }
 
 $(function() {
